@@ -1,2 +1,2 @@
 # fbcrawl
-crawl group facebook (post, comment) use scrapy, flask
+crawl group facebook (post, comment) use scrapy, flask, sqlite3
