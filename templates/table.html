@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <!-- Latest compiled and minified CSS & JS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/fontawesome.min.css">
+        <script src="https://code.jquery.com/jquery.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <style>
+            .border{
+                border: 1px black solid;
+            }
+            span{
+                text-decoration: underline;
+            }
+            tr:hover{
+                cursor: pointer;
+            }
+            .page{
+                float:right;
+                clear: both
+            }
+            .page>li{
+                list-style: none;
+                display: inline-block;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="table table-hover border">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Source</th>
+                    <th>ID</th>
+                    <th>Comment</th>
+                    <th>More</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td>1</td>
+                    <td> 
+                        {{item.page}}
+                    </td>
+                    <td>
+                        {{item.data.text}}
+                    </td>
+                    <td>
+                        {{item.date_crawl}}
+                    </td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- {% for item in data %}
+        <p>{{item.name}}</p>
+        <p>{{item.email}}</p>
+        {% endfor %} -->
+    </body>
+</html>

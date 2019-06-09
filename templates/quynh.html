@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<!-- Latest compiled and minified CSS & JS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/fontawesome.min.css">
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<style>
+		table, .border>tbody>tr>td{
+			border: 1px black solid;
+		}
+		.border>thead>tr>th{
+			border: 1px black solid;
+		}
+/* 
+		span{
+			text-decoration: underline;
+		} */
+		tr:hover{
+			cursor: pointer;
+		}
+		.page{
+			float:right;
+			clear: both
+		}
+		.page>li{
+			list-style: none;
+			display: inline-block;
+			padding: 5px;
+		}
+		.buttonn>p{
+			padding: 10px;
+			display: inline-block;
+			margin: 0;
+			border: 1px solid;
+		}
+		.table1{
+			width: 70%;
+			float: left;
+			/*display: inline-block;*/
+		}
+		.table2{
+			width: 29%;
+			float: left;
+			margin-left: 1%;
+		}
+		#exTab3 .nav-pills > li > a {
+			border-radius: 4px 4px 0 0 ;
+		}
+		#exTab3 .tab-content {
+			color : black;
+			/* background-color: #428bca;
+			padding : 5px 15px; */
+		}
+	</style>
+	<script>
+		function editPage(elm) {
+			page_id = $(elm).attr('page_id');
+			localStorage.setItem('editId',page_id);
+			urlPage = '/get_page/' + page_id;
+			$.ajax({
+				url: urlPage,
+				type: 'POST',
+				success: function(res) {
+					console.log(res);
+					var data = JSON.parse(res);
+					$('#editPageName').val(data['page_name']);
+					$('#editPageLink').val(data['page_link']);
+					$('#editPageMethod').val(data['page_method']);
+					$("input[name=editPageClass][value=" + data['page_class'] + "]").prop('checked', true);
+					$('#editPageNumber').val(data['page_number']);
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+		}
+		function updatePage(elm) {
+			console.log("debug");
+			page_id = localStorage.getItem('editId');
+			urlPage = '/update_page/' + page_id;
+			$.ajax({
+				url: urlPage,
+				data : {
+					page_name:$('#editPageName').val(),
+					page_link:$('#editPageLink').val(),
+					page_method:$('#editPageMethod').val(),
+					page_class:$("input[name='editPageClass']:checked").val(),
+					page_number:$('#editPageNumber').val()
+				},
+				type: 'POST',
+				success: function(res) {
+					console.log(res);
+					$('#editPage').modal('hide');
+					location.reload();
+					// var data = JSON.parse(res);
+					// $('#editPageName').val(data['page_name']);
+					// $('#editPageLink').val(data['page_link']);
+					// $('#editPageMethod').val(data['page_method']);
+					// $("input[name=editPageClass][value=" + data['page_class'] + "]").prop('checked', true);
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+		}
+		function updateAccount(elm) {
+			console.log("debug");
+			$.ajax({
+				url: "/update_account",
+				data : {
+					account_email:$('#editAccountEmail').val(),
+					account_password:$('#editAccountPassword').val(),
+				},
+				type: 'POST',
+				success: function(res) {
+					console.log(res);
+					$('#editAccount').modal('hide');
+					location.reload();
+					// var data = JSON.parse(res);
+					// $('#editPageName').val(data['page_name']);
+					// $('#editPageLink').val(data['page_link']);
+					// $('#editPageMethod').val(data['page_method']);
+					// $("input[name=editPageClass][value=" + data['page_class'] + "]").prop('checked', true);
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div id="exTab3" class="container">	
+			<ul class="nav nav-pills">
+				<li class="active">
+					<a  href="#1b" data-toggle="tab">CRAWL DB</a>
+				</li>
+				<li>
+					<a href="#2b" data-toggle="tab">CRAWL USER</a>
+				</li>
+				<li>
+					<a href="#3b" data-toggle="tab">PUSH DB</a>
+				</li>
+			</ul>
+			<div class="tab-content clearfix">
+				<div class="tab-pane active" id="1b">
+					<form action="/" method="POST">
+						<table class="table table-hover hover table1">
+							<tbody>
+								<tr>
+									<td style="width: 200px">Tên group/page/web</td>
+									<td><input type="text" class="form-control" name="page_name"></td>
+									<!-- <td colspan="2" rowspan="4"></td> -->
+								</tr>
+								<!-- <br> -->
+								<tr>
+									<td>Link group/page/web</td>
+									<td><input type="text"  class="form-control" name="page_link"></td>
+								</tr>
+								<!-- <br> -->
+								<tr>
+									<td>Tính chất</td>
+									<td>
+										<select name="page_method" id="" class="form-control">
+											<option value="medel">Model</option>
+											<option value="new">New</option>
+											<option value="sell">Sell</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Thể loại</td>
+									<td>
+										<form id="radioClass">
+											<label class="radio-inline">
+												<input type="radio" name="page_class" id="inlineRadio1" value="group" checked> Group
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="page_class" id="inlineRadio2" value="page"> Page
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="page_class" id="inlineRadio3" value="web"> Web
+											</label>
+										</form>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<button class="btn btn-info" type="submit" name="savePage">Lưu lại</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<table class="table table-hover table2">
+							<tbody>
+								<!-- <tr>
+									<td>FB</td>
+									<td><input type="text" placeholder="Nhập Faceboook" class="form-control"></td>
+								</tr> -->
+								<tr>
+									<td>Email</td>
+									{% if data_account %}
+									<td>{{data_account[0].email}}</td>
+									{% else %}
+									<td style="color: red;">None</td>
+									{% endif %}
+									<!-- <td><input type="text" placeholder="Nhập Facebook email" class="form-control"></td> -->
+								</tr>
+								<tr>
+									<td>Password</td>
+									{% if data_account %}
+									<td>************</td>
+									{% else %}
+									<td style="color: red;">None</td>
+									{% endif %}
+								</tr>
+								<tr>
+									<td colspan="2"><a class="btn btn-info" data-toggle="modal" data-target="#editAccount">Đặt lại</a></td>
+								</tr>
+							</tbody>
+						</table>
+						<div style="clear:both"></div>
+					</form>
+					<table class="table table-hover border">
+						<thead>
+							<tr>
+								<th width="5%">STT</th>
+								<th width="35%">Tên Group/Page/Web</th>
+								<th width="15%">Tính chất</th>
+								<th width="15%">Thể loại</th>
+								<th width="15%">Số trang crawl</th>
+								<th width="15%">Quản lí</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in data_page %}
+							<tr>
+								<td>{{item.id}}</td>
+								<td>{{item.page_name}}</td>
+								<td>{{item.page_method}}</td>
+								<td>{{item.page_class}}</td>
+								<td>{{item.page_number}}</td>
+								<td> 
+									<a page_id={{item.page_id}} onclick="editPage(this)" class="btn btn-info" data-toggle="modal" data-target="#editPage">Sửa</a>
+									<a href="delete_page/{{item.page_id}}" class="btn btn-danger">Xóa</a>
+								</td>
+							</tr>
+							{% endfor %}
+							<tr> 
+								<td colspan="6">
+									<ul class="page">
+										<li>  < | </li>
+										<li>  Đầu | </li>
+										<li>  1  | </li>
+										<li>  2  | </li>
+										<li>  3  | </li>
+										<li> Cuối |</li>
+										<li> > </li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div style="text-align: center; margin-bottom: 20px" >
+						<a href="crawl" class="btn btn-primary">Crawl thủ công</a>
+						<button class="btn btn-primary">Đặt lịch Crawl </button>
+					</div>
+					<table class="table table-hover border">
+						<thead>
+							<tr>
+								<th width="3%">STT</th>
+								<th width="10%">Nguồn</th>
+								<th width="40%">Bài post</th>
+								<th width="40%">Bình luận</th>
+								<th width="7%">Quản lí</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in data_crawl %}
+							<tr>
+								<td>{{item.id}}</td>
+								<td> 
+									{{item.page}}
+								</td>
+								<td>
+									<a class="pull-left" href="{{item.data.profile_img[0]}}" target="_blank">
+										<img src="{{item.data.profile_img[0]}}" class="img-circle" alt="Cinque Terre" style="width:64px"></a>
+									</a>
+									<a href="https://facebook.com/{{item.data.source[0]}}" target="_blank"><span><h4>{{item.data.name[0]}}</h4></span></a>
+									<h5>{{item.data.date[0]}}</h5>
+									<div class="overflow-auto">
+										<h6>{{item.data.text}}</h6>
+									</div>
+									{% for img in item.data.images %}
+									<img src="{{img}}" width="64" height="64">
+									{% endfor %}
+								</td>
+								<td>
+									{% for cment in item.comment %}
+									<a class="pull-left" href="{{cment.profile_img[0]}}" target="_blank">
+										<img src="{{cment.profile_img[0]}}" class="img-circle" alt="Cinque Terre" style="width:64px"></a>
+									</a>
+									<a href="https://facebook.com/{{cment.source_url[0]}}" target="_blank"><span><h4>{{cment.source[0]}}</h4></span></a>
+									<h5>{{cment.date}}</h5>
+									<h6>{{cment.text}}</h6>
+									<hr></hr>
+									{% endfor %}
+								</td>
+								<td></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<div class="tab-pane" id="2b">
+					<h3>COMMING SOON</h3>
+				</div>
+				<div class="tab-pane" id="3b">
+					<h3>COMMING SOON</h3>
+				</div>
+				<div class="modal fade" id="editPage" tabindex="-1" role="dialog" aria-labelledby="editPage" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="editModalLabel">Update Page</h4>
+							</div>
+							<div class="modal-body">
+							<form role="form">
+								<div class="form-group">
+								<label for="recipient-name" class="control-label">Tên group/face/web:</label>
+								<input type="text" class="form-control" id="editPageName">
+								</div>
+								<div class="form-group">
+								<label for="message-text" class="control-label">Link group/face/web:</label>
+								<input type="text" class="form-control" id="editPageLink">
+								</div>
+								<form class="form-group">
+									<label for="message-text" class="control-label">Tính chất:</label>
+									<select name="page_method" id="editPageMethod" class="form-control">
+										<option value="medel">Model</option>
+										<option value="new">New</option>
+										<option value="sell">Sell</option>
+									</select>
+								</form>
+								<form class="form-group">
+									<label for="message-text" class="control-label">Thể loại:</label>
+									<label class="radio-inline">
+										<input type="radio" name="editPageClass" id="editPageClass1" value="group"> Group
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="editPageClass" id="editPageClass2" value="page"> Page
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="editPageClass" id="editPageClass3" value="web"> Web
+									</label>
+								</form>
+								<form class="form-group">
+									<label for="message-text" class="control-label">Số trang crawl:</label>
+									<select name="page_method" id="editPageNumber" class="form-control">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+									</select>
+								</form>
+							</form>
+							</div>
+							<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<a onclick="updatePage(this)" type="button" class="btn btn-primary">Update</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="editAccount" tabindex="-1" role="dialog" aria-labelledby="editAccount" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="editModalLabel">Update account</h4>
+							</div>
+							<div class="modal-body">
+							<form role="form">
+								<div class="form-group">
+								<label for="recipient-name" class="control-label">Email:</label>
+								<input type="text" name="email" autocomplete="username email" class="form-control" id="editAccountEmail">
+								</div>
+								<div class="form-group">
+								<label for="message-text" class="control-label">Password:</label>
+								<input type="password" autocomplete="new-password" class="form-control" id="editAccountPassword">
+								</div>
+							</form>
+							</div>
+							<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<a onclick="updateAccount(this)" type="button" class="btn btn-primary">Save</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>

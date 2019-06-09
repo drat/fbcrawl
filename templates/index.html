@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<!-- Latest compiled and minified CSS & JS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/fontawesome.min.css">
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<style>
+		table, .border>tbody>tr>td{
+			border: 1px black solid;
+		}
+		.border>thead>tr>th{
+			border: 1px black solid;
+		}
+/* 
+		span{
+			text-decoration: underline;
+		} */
+		tr:hover{
+			cursor: pointer;
+		}
+		.page{
+			float:right;
+			clear: both
+		}
+		.page>li{
+			list-style: none;
+			display: inline-block;
+			padding: 5px;
+		}
+		.buttonn>p{
+			padding: 10px;
+			display: inline-block;
+			margin: 0;
+			border: 1px solid;
+		}
+		.table1{
+			width: 70%;
+			float: left;
+			/*display: inline-block;*/
+		}
+		.table2{
+			width: 29%;
+			float: left;
+			margin-left: 1%;
+		}
+		#exTab3 .nav-pills > li > a {
+			border-radius: 4px 4px 0 0 ;
+		}
+		#exTab3 .tab-content {
+			color : black;
+			/* background-color: #428bca;
+			padding : 5px 15px; */
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div id="exTab3" class="container">	
+			<ul class="nav nav-pills">
+				<li class="active">
+					<a  href="#1b" data-toggle="tab">CRAWL DB</a>
+				</li>
+				<li>
+					<a href="#2b" data-toggle="tab">CRAWL USER</a>
+				</li>
+				<li>
+					<a href="#3b" data-toggle="tab">PUSH DB</a>
+				</li>
+			</ul>
+			<div class="tab-content clearfix">
+				<div class="tab-pane active" id="1b">
+					<form action="/" method="POST">
+						<table class="table table-hover hover table1">
+							<tbody>
+								<tr>
+									<td style="width: 200px">Tên group/page/web</td>
+									<td><input type="text" class="form-control" name="page_name"></td>
+									<!-- <td colspan="2" rowspan="4"></td> -->
+								</tr>
+								<!-- <br> -->
+								<tr>
+									<td>Link group/page/web</td>
+									<td><input type="text"  class="form-control" name="page_link"></td>
+								</tr>
+								<!-- <br> -->
+								<tr>
+									<td>Thể loại</td>
+									<td>
+										<select name="page_method" id="" class="form-control">
+											<option value="medel">Model</option>
+											<option value="new">Tin tức</option>
+											<option value="sell">Bán hàng</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<label class="radio-inline">
+											<input type="radio" name="page_class" id="inlineRadio1" value="group"> Group
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="page_class" id="inlineRadio2" value="page"> Page
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="page_class" id="inlineRadio3" value="web"> Web
+										</label>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<button class="btn btn-info" type="submit" name="savePage">Lưu lại</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<table class="table table-hover table2">
+							<tbody>
+								<!-- <tr>
+									<td>FB</td>
+									<td><input type="text" placeholder="Nhập Faceboook" class="form-control"></td>
+								</tr> -->
+								<tr>
+									<td>Email</td>
+									<td><input type="text" placeholder="Nhập Facebook email" class="form-control"></td>
+								</tr>
+								<tr>
+									<td>Password</td>
+									<td><input type="text" placeholder="Nhập facebook password" class="form-control"></td>
+								</tr>
+								<tr>
+									<td colspan="2"><button class="btn btn-info" type="submit" name="saveAccount">Lưu lại</button></td>
+								</tr>
+							</tbody>
+						</table>
+						<div style="clear:both"></div>
+					</form>
+					<table class="table table-hover border">
+						<thead>
+							<tr>
+								<th width="5%">STT</th>
+								<th width="50%">Tên Group/Page/Web</th>
+								<th width="15%">Tính chất</th>
+								<th width="15%">thể loại</th>
+								<th width="15%">Quản lí</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in data_page %}
+							<tr>
+								<td>1</td>
+								<td>{{item.page_name}}</td>
+								<td>{{item.page_method}}</td>
+								<td>{{item.page_class}}</td>
+								<td> 
+									<button class="btn btn-info">Sửa </button>
+									<button class="btn btn-danger"> Xóa</button>
+								</td>
+							</tr>
+							{% endfor %}
+							<!-- <tr> 
+								<td colspan="5">
+									<ul class="page">
+										<li>  <  | </li>
+										<li>  Đầu | </li>
+										<li>  1  | </li>
+										<li>  2  | </li>
+										<li>  3  | </li>
+										<li> Cuối |</li>
+										<li> > </li>
+									</ul>
+								</td>
+							</tr> -->
+						</tbody>
+					</table>
+
+					<div style="text-align: center; margin-bottom: 10px" >
+						<button class="btn btn-default">Craw thủ công</button>
+						<button class="btn btn-default">Đặt lịch Craw </button>
+					</div>
+					<table class="table table-hover border">
+						<thead>
+							<tr>
+								<th width="3%">STT</th>
+								<th width="10%">Nguồn</th>
+								<th width="40%">Bài post</th>
+								<th width="40%">Bình luận</th>
+								<th width="7%">Quản lí</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in data_crawl %}
+							<tr>
+								<td>1</td>
+								<td> 
+									Lập trình Swift
+								</td>
+								<td>
+									<a class="pull-left" href="{{item.data.profile_img[0]}}" target="_blank">
+										<img src="{{item.data.profile_img[0]}}" class="img-circle" alt="Cinque Terre" style="width:64px"></a>
+									</a>
+									<a href="https://facebook.com/{{item.data.source[0]}}" target="_blank"><span><h4>{{item.data.name[0]}}</h4></span></a>
+									<h5>{{item.data.date[0]}}</h5>
+									<div class="overflow-auto">
+										<h6>{{item.data.text}}</h6>
+									</div>
+									{% for img in item.data.images %}
+									<img src="{{img}}" width="64" height="64">
+									{% endfor %}
+								</td>
+								<td>
+									{% for cment in item.comment %}
+									<a class="pull-left" href="{{cment.profile_img[0]}}" target="_blank">
+										<img src="{{cment.profile_img[0]}}" class="img-circle" alt="Cinque Terre" style="width:64px"></a>
+									</a>
+									<a href="https://facebook.com/{{cment.source_url[0]}}" target="_blank"><span><h4>{{cment.source[0]}}</h4></span></a>
+									<h5>{{cment.date}}</h5>
+									<h6>{{cment.text}}</h6>
+									<hr></hr>
+									{% endfor %}
+								</td>
+								<td></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<div class="tab-pane" id="2b">
+					<h3>COMMING SOON</h3>
+				</div>
+				<div class="tab-pane" id="3b">
+					<h3>COMMING SOON</h3>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>
