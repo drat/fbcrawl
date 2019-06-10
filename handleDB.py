@@ -102,7 +102,7 @@ def updatePostNumbers(date, number):
         )
         res = cur.fetchall()
         if len(res) > 0:
-            number += int(res[0])
+            number += int(res[0][0])
             cur = conn.execute("""
                 UPDATE crawlnumbers SET crawl_numbers=? WHERE date=?;""",
                 (number, date)

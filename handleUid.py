@@ -51,7 +51,7 @@ def findUid(USERNAME, PASSWORD, PROTECTED_URL):
             updateProfileImg(PROTECTED_URL, profile_img)
             return profile_img
         else:
-            return res[0]
+            return res[0][2]
     except Exception as e:
         print("error: {}".format(e))
         return ""

@@ -167,9 +167,9 @@ class CommentsSpider(FacebookSpider):
                 new = ItemLoader(item=CommentsItem(),selector=reply)
                 new.context['lang'] = self.lang           
                 new.add_xpath('source','.//h3/a/text()')  
-                # new.add_xpath('source_url','.//h3/a/@href') 
+                new.add_xpath('source_url','.//h3/a/@href') 
                 profile_img = ""
-                source_url = str(response.xpath(".//h3/a/@href").get())
+                # source_url = str(response.xpath(".//h3/a/@href").get())
                 # index1 = source_url.find("/profile.php?id=")
                 # if index1 != -1:
                 #     index2 = source_url.find("&fref=nf&refid=18&__tn__=")
@@ -181,7 +181,7 @@ class CommentsSpider(FacebookSpider):
                 #     index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
                 #     source_url = source_url[1:index2]
                 #     profile_img = "https://avatars.io/facebook/{}".format(source_url)
-                new._add_value('source_url', source_url)
+                # new._add_value('source_url', source_url)
                 new._add_value('profile_img', profile_img)
                 new.add_xpath('text','.//div[h3]/div[1]//text()')
                 new.add_xpath('img','.//div[h3]/div[2]/img/@src')
@@ -230,9 +230,9 @@ class CommentsSpider(FacebookSpider):
                 new = ItemLoader(item=CommentsItem(),selector=root)
                 new.context['lang'] = self.lang           
                 new.add_xpath('source','.//h3/a/text()')  
-                # new.add_xpath('source_url','.//h3/a/@href') 
+                new.add_xpath('source_url','.//h3/a/@href') 
                 profile_img = ""
-                source_url = str(response.xpath(".//h3/a/@href").get())
+                # source_url = str(response.xpath(".//h3/a/@href").get())
                 # index1 = source_url.find("/profile.php?id=")
                 # if index1 != -1:
                 #     index2 = source_url.find("&fref=nf&refid=18&__tn__=")
@@ -244,7 +244,7 @@ class CommentsSpider(FacebookSpider):
                 #     index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
                 #     source_url = source_url[1:index2]
                 #     profile_img = "https://avatars.io/facebook/{}".format(source_url)
-                new._add_value('source_url', source_url)
+                # new._add_value('source_url', source_url)
                 new._add_value('profile_img', profile_img)
                 new.add_value('reply_to','ROOT')
                 new.add_xpath('text','.//div[1]//text()')
@@ -260,9 +260,9 @@ class CommentsSpider(FacebookSpider):
                 new = ItemLoader(item=CommentsItem(),selector=reply)
                 new.context['lang'] = self.lang           
                 new.add_xpath('source','.//h3/a/text()')  
-                # new.add_xpath('source_url','.//h3/a/@href') 
+                new.add_xpath('source_url','.//h3/a/@href') 
                 profile_img = ""
-                source_url = str(response.xpath(".//h3/a/@href").get())
+                # source_url = str(response.xpath(".//h3/a/@href").get())
                 # index1 = source_url.find("/profile.php?id=")
                 # if index1 != -1:
                 #     index2 = source_url.find("&fref=nf&refid=18&__tn__=")
@@ -274,7 +274,7 @@ class CommentsSpider(FacebookSpider):
                 #     index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
                 #     source_url = source_url[1:index2]
                 #     profile_img = "https://avatars.io/facebook/{}".format(source_url)
-                new._add_value('source_url', source_url)
+                # new._add_value('source_url', source_url)
                 new._add_value('profile_img', profile_img)
                 new.add_value('reply_to',response.meta['reply_to'])
                 new.add_xpath('text','.//div[h3]/div[1]//text()')
@@ -315,9 +315,9 @@ class CommentsSpider(FacebookSpider):
                 new = ItemLoader(item=CommentsItem(),selector=reply)
                 new.context['lang'] = self.lang           
                 new.add_xpath('source','.//h3/a/text()')  
-                # new.add_xpath('source_url','.//h3/a/@href') 
+                new.add_xpath('source_url','.//h3/a/@href') 
                 profile_img = ""
-                source_url = str(response.xpath(".//h3/a/@href").get())
+                # source_url = str(response.xpath(".//h3/a/@href").get())
                 # index1 = source_url.find("/profile.php?id=")
                 # if index1 != -1:
                 #     index2 = source_url.find("&fref=nf&refid=18&__tn__=")
@@ -329,7 +329,7 @@ class CommentsSpider(FacebookSpider):
                 #     index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
                 #     source_url = source_url[1:index2]
                 #     profile_img = "https://avatars.io/facebook/{}".format(source_url)
-                new._add_value('source_url', source_url)
+                # new._add_value('source_url', source_url)
                 new._add_value('profile_img', profile_img)
                 new.add_value('reply_to',response.meta['reply_to'])
                 new.add_xpath('text','.//div[h3]/div[1]//text()')
