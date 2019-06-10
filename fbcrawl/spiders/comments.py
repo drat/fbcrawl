@@ -17,7 +17,7 @@ class CommentsSpider(FacebookSpider):
     name = "comments"
     custom_settings = {
         'FEED_EXPORT_FIELDS': ['source','reply_to','date','reactions','text', \
-                               'source_url', 'profile_img'],
+                               'source_url', 'profile_img', 'img'],
         'DUPEFILTER_CLASS' : 'scrapy.dupefilters.BaseDupeFilter',
         'CONCURRENT_REQUESTS' : 1
     }
@@ -170,20 +170,21 @@ class CommentsSpider(FacebookSpider):
                 # new.add_xpath('source_url','.//h3/a/@href') 
                 profile_img = ""
                 source_url = str(response.xpath(".//h3/a/@href").get())
-                index1 = source_url.find("/profile.php?id=")
-                if index1 != -1:
-                    index2 = source_url.find("&fref=nf&refid=18&__tn__=")
-                    if index2 == -1:
-                        index2 = source_url.find("&refid=18&__tn__=")
-                    source_url = source_url[index1+16:index2]
-                    profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source_url)
-                else:
-                    index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
-                    source_url = source_url[1:index2]
-                    profile_img = "https://avatars.io/facebook/{}".format(source_url)
+                # index1 = source_url.find("/profile.php?id=")
+                # if index1 != -1:
+                #     index2 = source_url.find("&fref=nf&refid=18&__tn__=")
+                #     if index2 == -1:
+                #         index2 = source_url.find("&refid=18&__tn__=")
+                #     source_url = source_url[index1+16:index2]
+                #     profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source_url)
+                # else:
+                #     index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
+                #     source_url = source_url[1:index2]
+                #     profile_img = "https://avatars.io/facebook/{}".format(source_url)
                 new._add_value('source_url', source_url)
                 new._add_value('profile_img', profile_img)
                 new.add_xpath('text','.//div[h3]/div[1]//text()')
+                new.add_xpath('img','.//div[h3]/div[2]/img/@src')
                 # new.add_xpath('date','.//abbr/text()')
                 date_string = response.xpath('.//abbr/text()').get()
                 date = parse_date2([date_string],{'lang':self.lang})
@@ -232,17 +233,17 @@ class CommentsSpider(FacebookSpider):
                 # new.add_xpath('source_url','.//h3/a/@href') 
                 profile_img = ""
                 source_url = str(response.xpath(".//h3/a/@href").get())
-                index1 = source_url.find("/profile.php?id=")
-                if index1 != -1:
-                    index2 = source_url.find("&fref=nf&refid=18&__tn__=")
-                    if index2 == -1:
-                        index2 = source_url.find("&refid=18&__tn__=")
-                    source_url = source_url[index1+16:index2]
-                    profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source_url)
-                else:
-                    index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
-                    source_url = source_url[1:index2]
-                    profile_img = "https://avatars.io/facebook/{}".format(source_url)
+                # index1 = source_url.find("/profile.php?id=")
+                # if index1 != -1:
+                #     index2 = source_url.find("&fref=nf&refid=18&__tn__=")
+                #     if index2 == -1:
+                #         index2 = source_url.find("&refid=18&__tn__=")
+                #     source_url = source_url[index1+16:index2]
+                #     profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source_url)
+                # else:
+                #     index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
+                #     source_url = source_url[1:index2]
+                #     profile_img = "https://avatars.io/facebook/{}".format(source_url)
                 new._add_value('source_url', source_url)
                 new._add_value('profile_img', profile_img)
                 new.add_value('reply_to','ROOT')
@@ -262,17 +263,17 @@ class CommentsSpider(FacebookSpider):
                 # new.add_xpath('source_url','.//h3/a/@href') 
                 profile_img = ""
                 source_url = str(response.xpath(".//h3/a/@href").get())
-                index1 = source_url.find("/profile.php?id=")
-                if index1 != -1:
-                    index2 = source_url.find("&fref=nf&refid=18&__tn__=")
-                    if index2 == -1:
-                        index2 = source_url.find("&refid=18&__tn__=")
-                    source_url = source_url[index1+16:index2]
-                    profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source_url)
-                else:
-                    index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
-                    source_url = source_url[1:index2]
-                    profile_img = "https://avatars.io/facebook/{}".format(source_url)
+                # index1 = source_url.find("/profile.php?id=")
+                # if index1 != -1:
+                #     index2 = source_url.find("&fref=nf&refid=18&__tn__=")
+                #     if index2 == -1:
+                #         index2 = source_url.find("&refid=18&__tn__=")
+                #     source_url = source_url[index1+16:index2]
+                #     profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source_url)
+                # else:
+                #     index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
+                #     source_url = source_url[1:index2]
+                #     profile_img = "https://avatars.io/facebook/{}".format(source_url)
                 new._add_value('source_url', source_url)
                 new._add_value('profile_img', profile_img)
                 new.add_value('reply_to',response.meta['reply_to'])
@@ -317,17 +318,17 @@ class CommentsSpider(FacebookSpider):
                 # new.add_xpath('source_url','.//h3/a/@href') 
                 profile_img = ""
                 source_url = str(response.xpath(".//h3/a/@href").get())
-                index1 = source_url.find("/profile.php?id=")
-                if index1 != -1:
-                    index2 = source_url.find("&fref=nf&refid=18&__tn__=")
-                    if index2 == -1:
-                        index2 = source_url.find("&refid=18&__tn__=")
-                    source_url = source_url[index1+16:index2]
-                    profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source_url)
-                else:
-                    index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
-                    source_url = source_url[1:index2]
-                    profile_img = "https://avatars.io/facebook/{}".format(source_url)
+                # index1 = source_url.find("/profile.php?id=")
+                # if index1 != -1:
+                #     index2 = source_url.find("&fref=nf&refid=18&__tn__=")
+                #     if index2 == -1:
+                #         index2 = source_url.find("&refid=18&__tn__=")
+                #     source_url = source_url[index1+16:index2]
+                #     profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source_url)
+                # else:
+                #     index2 = source_url.find("?fref=nf&refid=18&__tn__=-R")
+                #     source_url = source_url[1:index2]
+                #     profile_img = "https://avatars.io/facebook/{}".format(source_url)
                 new._add_value('source_url', source_url)
                 new._add_value('profile_img', profile_img)
                 new.add_value('reply_to',response.meta['reply_to'])

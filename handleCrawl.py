@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
 import os
+import re
 import sqlite3
 import json
+import handleUid
+import handleDB
 
 lang = "it"
 output = "data.json"
@@ -30,6 +34,22 @@ def crawl(email, password, page, date_crawl):
     while index < len(datastore):
         url = datastore[index]['url']
         post_id = datastore[index]['post_id']
+        # get profile image
+        source = datastore[index]['source'][0]
+        urlGetImg = 'https://www.facebook.com' + source
+        profile_img = handleUid.findUid(email, password, urlGetImg)
+        datastore[index]['profile_img'][0] = profile_img
+        # find price, email, phone numbers
+        if 'text' in datastore[index]:
+            text = datastore[index]['text']
+            emails = re.findall(r"[\w\.-]+@[a-z0-9\.\-+_]+\.[a-z]+", text)
+            phones = re.findall(r"(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})", text)
+            prices = re.findall(r"giá: \b\d+\b", text.lower())
+            if len(prices) == 0:
+                prices = re.findall(r"giá:\b\d+\b", text.lower())
+            datastore[index]['emails'] = emails
+            datastore[index]['phones'] = phones
+            datastore[index]['prices'] = prices
         # read comment from url
         cmd = "scrapy crawl comments -a email=\"{}\" -a password=\"{}\" -a post=\"{}\" -a lang=\"{}\" -o {}".format(email, password, url, lang, outputComment)
         os.system(cmd)
@@ -38,6 +58,23 @@ def crawl(email, password, page, date_crawl):
             if os.stat(outputComment).st_size > 0:
                 with open(outputComment, 'r') as commentFile:
                     comment = json.load(commentFile)
+                    for cment in comment:
+                        sourceComment = cment['source_url'][0]
+                        urlGetImg = 'https://www.facebook.com' + sourceComment
+                        print("<<<<<<<<<<{}".format(urlGetImg))
+                        profile_imgComment = handleUid.findUid(email, password, urlGetImg)
+                        cment['profile_img'][0] = profile_imgComment
+                        # find price, email, phone numbers
+                        if 'text' in cment:
+                            text = cment['text']
+                            emails = re.findall(r"[\w\.-]+@[a-z0-9\.\-+_]+\.[a-z]+", text)
+                            phones = re.findall(r"(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})", text)
+                            prices = re.findall(r"giá: \b\d+\b", text.lower())
+                            if len(prices) == 0:
+                                prices = re.findall(r"giá:\b\d+\b", text.lower())
+                            cment['emails'] = emails
+                            cment['phones'] = phones
+                            cment['prices'] = prices
                     with sqlite3.connect("database.db") as conn:
                         cur = conn.execute(
                             "SELECT * FROM comment WHERE post_id=?", (post_id,)
@@ -68,3 +105,6 @@ def crawl(email, password, page, date_crawl):
             conn.commit()
 
     os.system("rm -r {}".format(output))
+
+    # update crawls number to DB
+    handleDB.updatePostNumbers(date_crawl, index)

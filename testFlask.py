@@ -1,25 +1,16 @@
-import subprocess
+# -*- coding: utf-8 -*-
 
-from flask import Flask
-app = Flask(__name__)
+import re
+text = "Please contact us at contact@tutorialspoint.com for further information."+\
+        " You can also give feedbacl at feedback.hntv@tp.com or 0358949730"
+text2 = "xe con bán\n \
+        Giá: 10000 không thiếu\n \
+        liên hệ: 0358949730"
 
-@app.route('/')
-def hello_world():
-    """
-    Run spider in another process and store items in file. Simply issue command:
 
-    > scrapy crawl dmoz -o "output.json"
-
-    wait for  this command to finish, and read output.json to client.
-    """
-    email = "dangviethieu.hntv@gmail.com"
-    password = "Lp14061993"
-    page = "/groups/1445720959014904"
-    lang = "it"
-    output = "test.json"
-    subprocess.check_output(['scrapy', 'crawl', 'fb', '-a', 'email=', email, '-a', 'password=', password, '-a', 'page=', page, '-a', 'lang=', lang, '-o', output])
-    with open("output.json") as items_file:
-        return items_file.read()
-
-if __name__ == '__main__':
-    app.run(debug=True)
+emails = re.findall(r"[\w\.-]+@[a-z0-9\.\-+_]+\.[a-z]+", text)
+phoness = re.findall(r"(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})", text)
+gia = re.findall(r"giá: \b\d+\b", text2.lower())
+print(emails[0])
+print(gia[0])
+print(phoness[0])

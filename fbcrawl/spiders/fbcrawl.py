@@ -248,17 +248,17 @@ class FacebookSpider(scrapy.Spider):
         new.add_xpath('name', "//td/div/h3/strong/a/text() | //span/strong/a/text() | //div/div/div/a[contains(@href,'post_id')]/strong/text()")
         # new.add_xpath('source', "//td/div/h3/strong/a/@href | //span/strong/a/@href | //div/div/div/a[contains(@href,'post_id')]/strong/@href")
         # new.add_xpath('profile_img', "//td/div/a/img/@src")
-        profile_img = ""
         source = str(response.xpath("//td/div/a/@href").get())
-        index1 = source.find("/profile.php?id=")
-        if index1 != -1:
-            index2 = source.find("&fref=nf&refid=18&__tn__=-R")
-            source = source[index1+16:index2]
-            profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source)
-        else:
-            index2 = source.find("?fref=nf&refid=18&__tn__=-R")
-            source = source[1:index2]
-            profile_img = "https://avatars.io/facebook/{}".format(source)
+        profile_img = ""
+        # index1 = source.find("/profile.php?id=")
+        # if index1 != -1:
+        #     index2 = source.find("&fref=nf&refid=18&__tn__=-R")
+        #     source = source[index1+16:index2]
+        #     profile_img = "https://graph.facebook.com/{}/picture?type=large".format(source)
+        # else:
+        #     index2 = source.find("?fref=nf&refid=18&__tn__=-R")
+        #     source = source[1:index2]
+        #     profile_img = "https://avatars.io/facebook/{}".format(source)
         new._add_value('source', source)
         new._add_value('profile_img', profile_img)
         # new.add_xpath('shared_from','//div[contains(@data-ft,"top_level_post_id") and contains(@data-ft,\'"isShare":1\')]/div/div[3]//strong/a/text()')

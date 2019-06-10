@@ -5,13 +5,14 @@ import json
 import handleDB
 import handleCrawl
 import sqlite3
-from datetime import date
+from datetime import date, timedelta
 
 # page = "/groups/1445720959014904"
 data_page = []
 data_account = []
 
 app = Flask(__name__)
+app.secret_key = "super secret key"
 
 # @app.route('/')
 # def index():
@@ -58,29 +59,21 @@ def home():
                     account_password varchar(512)
                 );"""
             )
+            conn.execute(
+                """CREATE TABLE IF NOT EXISTS profile(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    link varchar(512),
+                    profile_img varchar(512)
+                );"""
+            )
+            conn.execute(
+                """CREATE TABLE IF NOT EXISTS crawlnumbers(
+                    date varchar(30),
+                    crawl_numbers INTEGER
+                );"""
+            )
             conn.commit()
-        # data = handleDB.readDB(table="post", id=page)
-        # # print("{}".format(data[0][0]))
-        # data_total = []
-        # index = 0
-        # while index < len(data):
-        #     # find comment based on post_id
-        #     post_id = data[index][1]
-        #     comment = handleDB.readDB(table="comment", id=post_id)
-        #     comment_json = {}
-        #     if len(comment) > 0:
-        #         comment_json = json.loads(comment[0][1]) 
-        #     # print(json.loads(comment[0][1])[0])
-        #     data_format = {
-        #         "page": data[index][0],
-        #         "post_id": post_id,
-        #         "date_crawl": data[index][2],
-        #         "data": json.loads(data[index][3]),
-        #         "comment": comment_json
-        #     }
-        #     data_total.append(data_format)
-        #     index += 1
-        # return render_template('quynh.html', data_crawl=data_total)
+
         data_page = []
         data_crawl = []
         pages = handleDB.readDB(table="page")
@@ -123,7 +116,25 @@ def home():
             }
             data_account.append(data_format)
 
-        return render_template('quynh.html', data_page=data_page, data_account=data_account, data_crawl=data_crawl)
+        data_crawl_number = []
+        today = date.today().strftime("%Y-%m-%d")
+        yesterday = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+        crawl_number1 = handleDB.readDB(table="crawlnumbers", id=today)
+        crawl_number2 = handleDB.readDB(table="crawlnumbers", id=yesterday)
+        if len(crawl_number1) > 0:
+            data_format = {
+                "date": today,
+                "crawl_numbers": crawl_number1[0][1]
+            }
+            data_crawl_number.append(data_format)
+        if len(crawl_number2) > 0:
+            data_format = {
+                "date": yesterday,
+                "crawl_numbers": crawl_number2[0][1]
+            }
+            data_crawl_number.append(data_format)
+
+        return render_template('quynh.html', data_page=data_page, data_account=data_account, data_crawl=data_crawl, data_crawl_number=data_crawl_number)
 
 @app.route('/', methods=['POST'])
 def savePage():
@@ -198,5 +209,4 @@ def logout():
     return home()
 
 if __name__ == "__main__":
-    app.secret_key = os.urandom(12)
-    app.run(debug=True,host='0.0.0.0', port=4000, threaded=True)
+    app.run()

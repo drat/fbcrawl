@@ -272,6 +272,17 @@
 						<a href="crawl" class="btn btn-primary">Crawl thủ công</a>
 						<button class="btn btn-primary">Đặt lịch Crawl </button>
 					</div>
+					<div style="text-align: center; margin-bottom: 20px" >
+						Hôm nay:
+						{% if data_crawl_number[0] %}
+						<label> {{data_crawl_number[0].crawl_numbers}} </label>
+						{% endif %}
+						<span style="display:inline-block; width: 30px;"></span>
+						Hôm qua:
+						{% if data_crawl_number[1] %}
+						<label> {{data_crawl_number[1].crawl_numbers}} </label>
+						{% endif %}
+					</div>
 					<table class="table table-hover border">
 						<thead>
 							<tr>
@@ -301,6 +312,24 @@
 									{% for img in item.data.images %}
 									<img src="{{img}}" width="64" height="64">
 									{% endfor %}
+									{% if item.data.emails %}
+									<h5>Email:</h5>
+									{% for email in item.data.emails %}
+									<h5>{{email}}</h5>
+									{% endfor %}
+									{% endif %}
+									{% if item.data.prices %}
+									<h5>Price:</h5>
+									{% for price in item.data.prices %}
+									<h5>{{price}}</h5>
+									{% endfor %}
+									{% endif %}
+									{% if item.data.phones %}
+									<h5>Phone:</h5>
+									{% for phone in item.data.phones %}
+									<h5>{{phone}}</h5>
+									{% endfor %}
+									{% endif %}
 								</td>
 								<td>
 									{% for cment in item.comment %}
@@ -310,6 +339,18 @@
 									<a href="https://facebook.com/{{cment.source_url[0]}}" target="_blank"><span><h4>{{cment.source[0]}}</h4></span></a>
 									<h5>{{cment.date}}</h5>
 									<h6>{{cment.text}}</h6>
+									{% for img in cment.img %}
+									<img src="{{img}}" width="64" height="64">
+									{% endfor %}
+									{% for price in cment.prices %}
+									<h6>{{price}}</h6>
+									{% endfor %}
+									{% for email in cment.emails %}
+									<h6>{{email}}</h6>
+									{% endfor %}
+									{% for phone in cment.phones %}
+									<h6>{{phones}}</h6>
+									{% endfor %}
 									<hr></hr>
 									{% endfor %}
 								</td>

@@ -626,6 +626,7 @@ class CommentsItem(scrapy.Item):
     )                      
     source_url = scrapy.Field()                      
     profile_img = scrapy.Field()
+    img = scrapy.Field()
     ahah = scrapy.Field()                      
     love = scrapy.Field()                      
     wow = scrapy.Field()                      

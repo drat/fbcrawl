@@ -24,6 +24,8 @@ def readDB(table, id=None, time=None):
                 command = "SELECT * FROM {}".format(table)
         elif table == 'account':
             command = "SELECT * FROM {}".format(table)
+        elif table == 'crawlnumbers':
+            command = "SELECT * FROM {} WHERE date=\"{}\"".format(table, id)
         cur = conn.execute(command)
         res = cur.fetchall()
         conn.commit()
@@ -92,11 +94,22 @@ def updateAccount(account_email, account_password):
             )
         conn.commit()
 
-# updateAccount("dangviethieu.hntv", "122")
-
-# page_link = "https://www.facebook.com/groups/1445720959014904/"
-# page_name = "Lập trình Swift"
-# page_name = page_name.decode('utf-8')
-# storePage2DB(page_name, page_link, "model", "group", 1)
-# page = readDB(table="page")
-# print("{}".format(page[0][0].encode('utf-8')))
+def updatePostNumbers(date, number):
+    with sqlite3.connect("database.db") as conn:
+        cur = conn.execute(
+            """SELECT crawl_numbers FROM crawlnumbers WHERE date=?;""",
+            (date,)
+        )
+        res = cur.fetchall()
+        if len(res) > 0:
+            number += int(res[0])
+            cur = conn.execute("""
+                UPDATE crawlnumbers SET crawl_numbers=? WHERE date=?;""",
+                (number, date)
+            )
+        else:
+            cur = conn.execute("""
+                INSERT INTO crawlnumbers (date, crawl_numbers) VALUES (?, ?);""",
+                (date, number)
+            )
+            conn.commit()
