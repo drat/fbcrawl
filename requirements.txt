@@ -1,0 +1,4 @@
+flask
+pysqlite3
+beautifulsoup4
+scrapy
