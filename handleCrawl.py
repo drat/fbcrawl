@@ -11,6 +11,11 @@ output = "data.json"
 outputComment = "comment.json"
 
 def crawl(email, password, page, date_crawl):
+    # delete files
+    if os.path.exists(output):
+        os.system("rm -rf {}".format(output))
+    if os.path.exists(outputComment):
+        os.system("rm -rf {}".format(outputComment))
     # check if page, date_crawl is in DB, don't crawl
     with sqlite3.connect("database.db") as conn:
         cur = conn.execute(
@@ -88,7 +93,7 @@ def crawl(email, password, page, date_crawl):
                             )
                             conn.commit()
                     # delete comment json file
-                os.system("rm -r {}".format(outputComment))
+                os.system("rm -rf {}".format(outputComment))
         index +=1
 
     # put post to DB
@@ -104,7 +109,7 @@ def crawl(email, password, page, date_crawl):
             index += 1
             conn.commit()
 
-    os.system("rm -r {}".format(output))
+    os.system("rm -rf {}".format(output))
 
     # update crawls number to DB
     handleDB.updatePostNumbers(date_crawl, index)
