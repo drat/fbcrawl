@@ -5,7 +5,7 @@ crawl group facebook (post, comment) use scrapy, flask, python 3
 # install
 1. download and install Python 3.7: https://www.python.org/downloads/
 2. install virtualenv <br />
-	*python -m venv myproject*
+	*python -m venv myproject*<br />
 	*myproject\Scripts\activate*
 3. install required packages <br />
 	*pip install Twisted-19.2.1-cp37-cp37m-win32.whl* <br />
