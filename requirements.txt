@@ -2,3 +2,4 @@ flask
 pysqlite3
 beautifulsoup4
 scrapy
+apscheduler==2.1.2

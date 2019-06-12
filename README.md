@@ -1,5 +1,6 @@
 # fbcrawl
-crawl group facebook (post, comment) use scrapy, flask
+crawl group facebook (post, comment) use scrapy, flask, python 3
+(update from https://github.com/rugantio/fbcrawl)
 
 # install
 1. download and install Python 3.7: https://www.python.org/downloads/

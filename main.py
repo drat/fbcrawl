@@ -1,5 +1,7 @@
 from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for
+import atexit
+from apscheduler.scheduler import Scheduler
 import os
 import json
 import handleDB
@@ -134,7 +136,7 @@ def home():
             }
             data_crawl_number.append(data_format)
 
-        return render_template('quynh.html', data_page=data_page, data_account=data_account, data_crawl=data_crawl, data_crawl_number=data_crawl_number)
+        return render_template('index.html', data_page=data_page, data_account=data_account, data_crawl=data_crawl, data_crawl_number=data_crawl_number)
 
 @app.route('/', methods=['POST'])
 def savePage():
@@ -208,5 +210,19 @@ def logout():
     session['logged_in'] = False
     return home()
 
+# Shutdown your cron thread if the web process is stopped
+atexit.register(lambda: cron.shutdown(wait=False))
+
+def crawlScheduler():
+    print("crawl DB")
+    accounts = handleDB.readDB(table="account")
+    pages = handleDB.readDB(table="page")
+    today = date.today().strftime("%Y-%m-%d")
+    for page in pages:
+        handleCrawl.crawl(accounts[0][1], accounts[0][2], page[2], today)
+
 if __name__ == "__main__":
+    cron = Scheduler(daemon=True)
+    cron.start()
+    cron.add_cron_job(crawlScheduler, hour='0')
     app.run()
