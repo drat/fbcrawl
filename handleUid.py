@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import sqlite3
 import json
+import time
 
 def login(session, email, password):
     response = session.post('https://m.facebook.com/login.php', data={
@@ -43,6 +44,7 @@ def findUidWitLogin(USERNAME, PASSWORD, PROTECTED_URL):
 
 def findUid(USERNAME, PASSWORD, PROTECTED_URL):
     try:
+        time.sleep(1)
         res = readProfileImg(PROTECTED_URL)
         if len(res) == 0:
             profile_img = findUidWithoutLogin(PROTECTED_URL)

@@ -78,6 +78,7 @@ def home():
 
         data_page = []
         data_crawl = []
+        indexNumber = 0
         pages = handleDB.readDB(table="page")
         for index, page in enumerate(pages):
             data_format = {
@@ -92,14 +93,14 @@ def home():
             data_page.append(data_format)
 
             datas = handleDB.readDB(table="post", id=page[2], time=today)
-            for index, data in enumerate(datas):
+            for indexComment, data in enumerate(datas):
                 post_id = data[2]
                 comment = handleDB.readDB(table="comment", id=post_id)
                 comment_json = {}
                 if len(comment) > 0:
                     comment_json = json.loads(comment[0][2]) 
                 data_format = {
-                    "id": index + 1,
+                    "id": indexNumber + 1,
                     "page": page[1],
                     "post_id": post_id,
                     "date_crawl": data[3],
@@ -107,6 +108,7 @@ def home():
                     "comment": comment_json
                 }
                 data_crawl.append(data_format)
+                indexNumber += 1
 
         data_account = []
         accounts = handleDB.readDB(table="account")
@@ -191,7 +193,7 @@ def crawl():
     pages = handleDB.readDB(table="page")
     today = date.today().strftime("%Y-%m-%d")
     for page in pages:
-        handleCrawl.crawl(accounts[0][1], accounts[0][2], page[2], today)
+        handleCrawl.crawl(accounts[0][1], accounts[0][2], page[2], int(page[5]) * 7, today)
     return redirect(url_for('home'))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -219,7 +221,7 @@ def crawlScheduler():
     pages = handleDB.readDB(table="page")
     today = date.today().strftime("%Y-%m-%d")
     for page in pages:
-        handleCrawl.crawl(accounts[0][1], accounts[0][2], page[2], today)
+        handleCrawl.crawl(accounts[0][1], accounts[0][2], page[2], int(page[5]) * 7, today)
 
 if __name__ == "__main__":
     cron = Scheduler(daemon=True)

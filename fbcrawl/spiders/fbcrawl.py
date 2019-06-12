@@ -195,51 +195,51 @@ class FacebookSpider(scrapy.Spider):
             self.count -= 1
             yield scrapy.Request(temp_post, self.parse_post, priority = self.count, meta={'item':new})       
 
-        # #load following page, try to click on "more"
-        # #after few pages have been scraped, the "more" link might disappears 
-        # #if not present look for the highest year not parsed yet
-        # #click once on the year and go back to clicking "more"
+        #load following page, try to click on "more"
+        #after few pages have been scraped, the "more" link might disappears 
+        #if not present look for the highest year not parsed yet
+        #click once on the year and go back to clicking "more"
         
-        # #new_page is different for groups
-        # if self.group == 1:
-        #     new_page = response.xpath("//div[contains(@id,'stories_container')]/div[2]/a/@href").extract()      
-        # else:
-        #     new_page = response.xpath("//div[2]/a[contains(@href,'timestart=') and not(contains(text(),'ent')) and not(contains(text(),number()))]/@href").extract()      
-        #     #this is why lang is needed                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^               
+        #new_page is different for groups
+        if self.group == 1:
+            new_page = response.xpath("//div[contains(@id,'stories_container')]/div[2]/a/@href").extract()      
+        else:
+            new_page = response.xpath("//div[2]/a[contains(@href,'timestart=') and not(contains(text(),'ent')) and not(contains(text(),number()))]/@href").extract()      
+            #this is why lang is needed                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^               
         
-        # if not new_page: 
-        #     self.logger.info('[!] "more" link not found, will look for a "year" link')
-        #     #self.k is the year link that we look for 
-        #     if response.meta['flag'] == self.k and self.k >= self.year:                
-        #         xpath = "//div/a[contains(@href,'time') and contains(text(),'" + str(self.k) + "')]/@href"
-        #         new_page = response.xpath(xpath).extract()
-        #         if new_page:
-        #             new_page = response.urljoin(new_page[0])
-        #             self.k -= 1
-        #             self.logger.info('Found a link for year "{}", new_page = {}'.format(self.k,new_page))
-        #             yield scrapy.Request(new_page, callback=self.parse_page, meta={'flag':self.k})
-        #         else:
-        #             while not new_page: #sometimes the years are skipped this handles small year gaps
-        #                 self.logger.info('Link not found for year {}, trying with previous year {}'.format(self.k,self.k-1))
-        #                 self.k -= 1
-        #                 if self.k < self.year:
-        #                     raise CloseSpider('Reached date: {}. Crawling finished'.format(self.date))
-        #                 xpath = "//div/a[contains(@href,'time') and contains(text(),'" + str(self.k) + "')]/@href"
-        #                 new_page = response.xpath(xpath).extract()
-        #             self.logger.info('Found a link for year "{}", new_page = {}'.format(self.k,new_page))
-        #             new_page = response.urljoin(new_page[0])
-        #             self.k -= 1
-        #             yield scrapy.Request(new_page, callback=self.parse_page, meta={'flag':self.k}) 
-        #     else:
-        #         self.logger.info('Crawling has finished with no errors!')
-        # else:
-        #     new_page = response.urljoin(new_page[0])
-        #     if 'flag' in response.meta:
-        #         self.logger.info('Page scraped, clicking on "more"! new_page = {}'.format(new_page))
-        #         yield scrapy.Request(new_page, callback=self.parse_page, meta={'flag':response.meta['flag']})
-        #     else:
-        #         self.logger.info('First page scraped, clicking on "more"! new_page = {}'.format(new_page))
-        #         yield scrapy.Request(new_page, callback=self.parse_page, meta={'flag':self.k})
+        if not new_page: 
+            self.logger.info('[!] "more" link not found, will look for a "year" link')
+            #self.k is the year link that we look for 
+            if response.meta['flag'] == self.k and self.k >= self.year:                
+                xpath = "//div/a[contains(@href,'time') and contains(text(),'" + str(self.k) + "')]/@href"
+                new_page = response.xpath(xpath).extract()
+                if new_page:
+                    new_page = response.urljoin(new_page[0])
+                    self.k -= 1
+                    self.logger.info('Found a link for year "{}", new_page = {}'.format(self.k,new_page))
+                    yield scrapy.Request(new_page, callback=self.parse_page, meta={'flag':self.k})
+                else:
+                    while not new_page: #sometimes the years are skipped this handles small year gaps
+                        self.logger.info('Link not found for year {}, trying with previous year {}'.format(self.k,self.k-1))
+                        self.k -= 1
+                        if self.k < self.year:
+                            raise CloseSpider('Reached date: {}. Crawling finished'.format(self.date))
+                        xpath = "//div/a[contains(@href,'time') and contains(text(),'" + str(self.k) + "')]/@href"
+                        new_page = response.xpath(xpath).extract()
+                    self.logger.info('Found a link for year "{}", new_page = {}'.format(self.k,new_page))
+                    new_page = response.urljoin(new_page[0])
+                    self.k -= 1
+                    yield scrapy.Request(new_page, callback=self.parse_page, meta={'flag':self.k}) 
+            else:
+                self.logger.info('Crawling has finished with no errors!')
+        else:
+            new_page = response.urljoin(new_page[0])
+            if 'flag' in response.meta:
+                self.logger.info('Page scraped, clicking on "more"! new_page = {}'.format(new_page))
+                yield scrapy.Request(new_page, callback=self.parse_page, meta={'flag':response.meta['flag']})
+            else:
+                self.logger.info('First page scraped, clicking on "more"! new_page = {}'.format(new_page))
+                yield scrapy.Request(new_page, callback=self.parse_page, meta={'flag':self.k})
                 
     def parse_post(self,response):
         print("response: {}".format(response))

@@ -10,7 +10,7 @@ lang = "it"
 output = "data.json"
 outputComment = "comment.json"
 
-def crawl(email, password, page, date_crawl):
+def crawl(email, password, page, pagenumbers, date_crawl):
     # delete files
     if os.path.exists(output):
         os.system("rm -rf {}".format(output))
@@ -26,7 +26,7 @@ def crawl(email, password, page, date_crawl):
             conn.commit()
             return
     # crawl post
-    cmd = "scrapy crawl fb -a email=\"{}\" -a password=\"{}\" -a page=\"{}\" -a lang=\"{}\" -o {}".format(email, password, page, lang, output)
+    cmd = "scrapy crawl fb -a email=\"{}\" -a password=\"{}\" -a page=\"{}\" -a max=\"{}\" -a lang=\"{}\" -o {}".format(email, password, page, pagenumbers, lang, output)
     os.system(cmd)
 
     datastore = {}
